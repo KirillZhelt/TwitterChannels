@@ -1,4 +1,4 @@
-function setupCollapsibleChannelDivs() {
+function setupChannelDivs() {
     const channelDivs = document.getElementsByClassName('channel');
 
     for (let i = 0; i < channelDivs.length; i++) {
@@ -10,8 +10,13 @@ function setupCollapsibleChannelDivs() {
                 channelInfoDiv.style.display = 'none';
             }
         });
+
+        const channelDeleteButton = channelDivs[i].querySelector('.channel__delete');
+        channelDeleteButton.addEventListener('click', function() {
+            this.parentNode.remove();
+        });
     }
 }
 
-setupCollapsibleChannelDivs();
+setupChannelDivs();
 
