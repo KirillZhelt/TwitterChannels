@@ -62,6 +62,7 @@ body {
     width: 500px;
     margin-top: 20px;
     padding: 20px;
+    user-select: none;
 }
 
 .channel__name {
@@ -77,9 +78,11 @@ body {
     width: 20px;
     height: 20px;    
     margin-left: 20px;
+    cursor: pointer;
 }
 
 .channel__info {
+    display: none;
 }
 
 .channel__text {
