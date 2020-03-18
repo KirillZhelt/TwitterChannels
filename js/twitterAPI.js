@@ -15,28 +15,43 @@ class TwitterAPI {
     static _token = {
         key: '1219216442236817409-BBotPv1awrQdJrHU6LS2jG4ni7G9sL',
         secret: 'ohkHDTQwPbDV2KZcQmPJiUUKBbAYQ5GXxpciMJTwxnGlv',
-    }
+    };
+
+    static _proxy = 'https://cors-anywhere.herokuapp.com/';
 
     _getOAuthHeaderString(requestData) {
         return TwitterAPI._oauth.toHeader(TwitterAPI._oauth.authorize(requestData, TwitterAPI._token))
                                 .Authorization;
     }
 
-    searchChannels(searchString) {
+    searchChannels(searchString, onSuccess, onFailure) {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState === XMLHttpRequest.DONE) {
+                const result = JSON.parse(this.responseText);
+
                 if (this.status === 200) {
-                    alert(this.responseText);
+                    onSuccess(result.map(element => {
+                        return {
+                            id: element.id,
+                            name: element.name,
+                            screenName: element.screen_name,
+                            verified: element.verified,
+                            imgSrc: element.profile_image_url,
+                            description: element.description,
+                            followersCount: element.followers_count,
+                            tweetsCount: element.statuses_count,
+                        };
+                    }));
                 } else {
-                    alert(this.responseText);
+                    onFailure(result);
                 }
             }
         };
-        xhttp.open('GET', 'https://cors-anywhere.herokuapp.com/api.twitter.com:443/1.1/users/search.json?q=soccer', 
+        xhttp.open('GET', TwitterAPI._proxy + `api.twitter.com:443/1.1/users/search.json?q=${searchString}&count=5`, 
             true);
         xhttp.setRequestHeader('Authorization', this._getOAuthHeaderString({
-            url: 'https://api.twitter.com/1.1/users/search.json?q=soccer',
+            url: `https://api.twitter.com/1.1/users/search.json?q=${searchString}&count=5`,
             method: 'GET',
         }));
         xhttp.send();

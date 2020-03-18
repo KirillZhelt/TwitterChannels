@@ -22,4 +22,8 @@ function setupChannelDivs() {
 
 setupChannelDivs();
 
-twitterAPI.searchChannels();
+twitterAPI.searchChannels('kanye west', channels => {
+    console.log(channels);
+}, errorObj => {
+    console.log(errorObj);
+});
