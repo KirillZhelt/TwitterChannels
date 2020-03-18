@@ -1,3 +1,5 @@
+import { twitterAPI } from './twitterAPI.js'
+
 function setupChannelDivs() {
     const channelDivs = document.getElementsByClassName('channel');
 
@@ -20,3 +22,4 @@ function setupChannelDivs() {
 
 setupChannelDivs();
 
+twitterAPI.searchChannels();
