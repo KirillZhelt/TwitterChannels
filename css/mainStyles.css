@@ -37,12 +37,23 @@ body {
     border-radius: 4px;
 }
 
+.search-bar__input:focus ~ .search-bar__dropdown-hints {
+    display: block;
+}
+
 .search-bar__dropdown-hints {
     position: absolute;
     width: 280px;
     height: 200px;
-    background-color: aquamarine;
+    background-color: #ffffff;
     display: none;
+}
+
+.search-bar__hints-not-found {
+    font-family: 'Roboto', sans-serif;
+    font-style: italic;
+    margin: 10px;
+    color: #c9c9c9;
 }
 
 .search-bar__button {

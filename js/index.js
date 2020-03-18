@@ -20,10 +20,52 @@ function setupChannelDivs() {
     }
 }
 
-setupChannelDivs();
+function setupSearchBar() {
+    const searchInput = document.querySelector('.search-bar__input');
 
-twitterAPI.searchChannels('kanye west', channels => {
-    console.log(channels);
-}, errorObj => {
-    console.log(errorObj);
-});
+    let lastUpdate = new Date();
+    searchInput.addEventListener('input', function(e) {
+        const currentTime = new Date();
+        if ((currentTime.getTime() - lastUpdate.getTime()) / 1000 > 1) {
+            lastUpdate = currentTime;
+
+            if (this.value.length === 0) {
+                showSearchNotFound();
+            } else {
+                twitterAPI.searchChannels(this.value, showSearchResults, showSearchNotFound);
+            }
+        } else {
+            setTimeout(() => {
+                this.dispatchEvent(new Event('input'));
+            }, 1500);
+        }
+    });
+}
+
+function showSearchResults(searchResults) {
+    const hintsDiv = document.querySelector('.search-bar__dropdown-hints');
+    hintsDiv.querySelectorAll('.search-bar__hint').forEach(element => element.remove());
+
+    const hintsNotFound = hintsDiv.querySelector('.search-bar__hints-not-found');
+    hintsNotFound.style.display = 'none';
+
+    searchResults.forEach(channel => {
+        const channelHint = document.createElement('p');
+        channelHint.className = 'search-bar__hint';
+        channelHint.textContent = channel.name;
+
+        hintsDiv.append(channelHint);
+    });
+}
+
+function showSearchNotFound(errorObj) {
+    const hintsDiv = document.querySelector('.search-bar__dropdown-hints');
+    hintsDiv.querySelectorAll('.search-bar__hint').forEach(element => element.remove());
+
+    const hintsNotFound = hintsDiv.querySelector('.search-bar__hints-not-found');
+    hintsNotFound.style.display = '';
+}
+
+setupChannelDivs();
+setupSearchBar();
+
