@@ -41,6 +41,10 @@ body {
     display: block;
 }
 
+.search-bar__dropdown-hints:hover {
+    display: block;
+}
+
 .search-bar__dropdown-hints {
     position: absolute;
     width: 280px;

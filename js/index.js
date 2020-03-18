@@ -53,6 +53,10 @@ function showSearchResults(searchResults) {
         const channelHint = document.createElement('p');
         channelHint.className = 'search-bar__hint';
         channelHint.textContent = channel.name;
+        channelHint.addEventListener('click', function(e) {
+            this.parentElement.style.display = "block";
+            this.style.backgroundColor = "yellow";
+        });
 
         hintsDiv.append(channelHint);
     });
@@ -68,4 +72,3 @@ function showSearchNotFound(errorObj) {
 
 setupChannelDivs();
 setupSearchBar();
-
