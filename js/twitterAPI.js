@@ -19,32 +19,47 @@ class TwitterAPI {
 
     static _proxy = 'https://cors-anywhere.herokuapp.com/';
 
+    _isSubscribed = true;
+
     _getOAuthHeaderString(requestData) {
         return TwitterAPI._oauth.toHeader(TwitterAPI._oauth.authorize(requestData, TwitterAPI._token))
                                 .Authorization;
     }
 
+    unsubscribe() {
+        this._isSubscribed = false;
+    }
+
+    subscribe() {
+        this._isSubscribed = true;
+    }
+
     searchChannels(searchString, onSuccess, onFailure) {
         const xhttp = new XMLHttpRequest();
+        const isSubscribed = this._isSubscribed;
         xhttp.onreadystatechange = function() {
             if (this.readyState === XMLHttpRequest.DONE) {
                 const result = JSON.parse(this.responseText);
 
                 if (this.status === 200) {
-                    onSuccess(result.map(element => {
-                        return {
-                            id: element.id,
-                            name: element.name,
-                            screenName: element.screen_name,
-                            verified: element.verified,
-                            imgSrc: element.profile_image_url,
-                            description: element.description,
-                            followersCount: element.followers_count,
-                            tweetsCount: element.statuses_count,
-                        };
-                    }));
+                    if (isSubscribed) {
+                        onSuccess(result.map(element => {
+                            return {
+                                id: element.id,
+                                name: element.name,
+                                screenName: element.screen_name,
+                                verified: element.verified,
+                                imgSrc: element.profile_image_url,
+                                description: element.description,
+                                followersCount: element.followers_count,
+                                tweetsCount: element.statuses_count,
+                            };
+                        }));
+                    }
                 } else {
-                    onFailure(result);
+                    if (isSubscribed) {
+                        onFailure(result);
+                    }
                 }
             }
         };

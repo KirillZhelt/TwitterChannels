@@ -23,10 +23,11 @@ function setupChannelDivs() {
 function setupSearchBar() {
     const searchInput = document.querySelector('.search-bar__input');
 
-    let lastUpdate = new Date();
+    let lastUpdate = new Date(0);
     searchInput.addEventListener('input', function(e) {
         const currentTime = new Date();
         if ((currentTime.getTime() - lastUpdate.getTime()) / 1000 > 1) {
+            console.log('update');
             lastUpdate = currentTime;
 
             if (this.value.length === 0) {
@@ -35,11 +36,23 @@ function setupSearchBar() {
                 twitterAPI.searchChannels(this.value, showSearchResults, showSearchNotFound);
             }
         } else {
+            console.log('no update');
+
             setTimeout(() => {
                 this.dispatchEvent(new Event('input'));
             }, 1500);
         }
     });
+}
+
+function updateHints() {
+    // TODO: call this method after a certain timeout after unsubscribing from updates
+
+    // if (this.value.length === 0) {
+    //     showSearchNotFound();
+    // } else {
+    //     twitterAPI.searchChannels(this.value, showSearchResults, showSearchNotFound);
+    // }
 }
 
 function showSearchResults(searchResults) {
