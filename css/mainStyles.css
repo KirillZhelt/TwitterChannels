@@ -48,7 +48,6 @@ body {
 .search-bar__dropdown-hints {
     position: absolute;
     background-color: #ffffff;
-    padding-right: 30px;
     width: 600px;
     overflow: hidden;
     display: none;
@@ -89,7 +88,6 @@ body {
 .search-bar__hint-screen-name {
     font-family: 'Roboto', sans-serif;
     color: grey;
-    padding-left: 10px;
 }
 
 .search-bar__button {
