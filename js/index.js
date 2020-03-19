@@ -1,5 +1,60 @@
 import { twitterAPI } from './twitterAPI.js'
 
+class ChannelHintsUpdater {
+
+    // undefined value means no query in cache, null means query is pending, and other value is real value
+    queriesCache = new Map();
+
+    queryRequestTimestamps = new Map();
+    
+    isLatestPossible(input) {
+        const laterQueries = [];
+
+        this.queryRequestTimestamps.forEach((value, key, m) => {
+            if (value.getTime() > m.get(input).getTime()) {
+                laterQueries.push(key);
+            }
+        });
+
+        for (const laterQuery of laterQueries) {
+            if (this.queriesCache.get(laterQuery) !== undefined && this.queriesCache.get(laterQuery) !== null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    search(e) {
+        const input = e.target.value;
+        if (input.length === 0) {
+            showSearchNotFound();
+            return;
+        }
+
+        this.queryRequestTimestamps.set(input, new Date());
+
+        if (this.queriesCache.get(input) !== undefined && this.queriesCache.get(input) !== null) {
+            showSearchResults(this.queriesCache.get(input));
+        } else {
+            if (this.queriesCache.get(input) === undefined) {
+                this.queriesCache.set(input, null); // means that request is pending
+
+                twitterAPI.searchChannels(input, elements => {
+                    this.queriesCache.set(input, elements);
+                    
+                    if (this.isLatestPossible(input)) {
+                        showSearchResults(elements);
+                    }
+                }, errObj => {
+                    this.queriesCache.set(input, undefined);
+                    showSearchNotFound(errObj);
+                });
+            }
+        }
+    }
+}
+
 function setupChannelDivs() {
     const channelDivs = document.getElementsByClassName('channel');
 
@@ -23,36 +78,10 @@ function setupChannelDivs() {
 function setupSearchBar() {
     const searchInput = document.querySelector('.search-bar__input');
 
-    let lastUpdate = new Date(0);
-    searchInput.addEventListener('input', function(e) {
-        const currentTime = new Date();
-        if ((currentTime.getTime() - lastUpdate.getTime()) / 1000 > 1) {
-            console.log('update');
-            lastUpdate = currentTime;
-
-            if (this.value.length === 0) {
-                showSearchNotFound();
-            } else {
-                twitterAPI.searchChannels(this.value, showSearchResults, showSearchNotFound);
-            }
-        } else {
-            console.log('no update');
-
-            setTimeout(() => {
-                this.dispatchEvent(new Event('input'));
-            }, 1500);
-        }
+    const channelHintsUpdater = new ChannelHintsUpdater();
+    searchInput.addEventListener('input', e => {
+        channelHintsUpdater.search(e);
     });
-}
-
-function updateHints() {
-    // TODO: call this method after a certain timeout after unsubscribing from updates
-
-    // if (this.value.length === 0) {
-    //     showSearchNotFound();
-    // } else {
-    //     twitterAPI.searchChannels(this.value, showSearchResults, showSearchNotFound);
-    // }
 }
 
 function showSearchResults(searchResults) {
