@@ -47,9 +47,10 @@ body {
 
 .search-bar__dropdown-hints {
     position: absolute;
-    width: 280px;
-    height: 200px;
     background-color: #ffffff;
+    padding-right: 30px;
+    width: 600px;
+    overflow: hidden;
     display: none;
 }
 
@@ -58,6 +59,37 @@ body {
     font-style: italic;
     margin: 10px;
     color: #c9c9c9;
+}
+
+.search-bar__hint {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.search-bar__hint-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.search-bar__hint-name {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    padding-left: 16px;
+    white-space: nowrap;
+}
+
+.search-bar__hint-verified {
+    width: 16px;
+    height: 16px;
+    padding-left: 4px;
+}
+
+.search-bar__hint-screen-name {
+    font-family: 'Roboto', sans-serif;
+    color: grey;
+    padding-left: 10px;
 }
 
 .search-bar__button {

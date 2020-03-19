@@ -84,6 +84,33 @@ function setupSearchBar() {
     });
 }
 
+function createChannelHint(channel) {
+    const hintDiv = document.createElement('div');
+    hintDiv.className = 'search-bar__hint';
+
+    const hintIconImg = document.createElement('img');
+    hintIconImg.className = 'search-bar__hint-icon';
+    hintIconImg.src = channel.imgSrc;
+    hintDiv.append(hintIconImg);
+
+    const hintNameSpan = document.createElement('span');
+    hintNameSpan.className = 'search-bar__hint-name';
+    hintNameSpan.textContent = channel.name;
+    hintDiv.append(hintNameSpan);
+
+    const hintVerifiedImg = document.createElement('img');
+    hintVerifiedImg.className = 'search-bar__hint-verified';
+    hintVerifiedImg.src = 'media/verified-icon.png';
+    hintDiv.append(hintVerifiedImg);
+
+    const hintScreenNameSpan = document.createElement('span');
+    hintScreenNameSpan.className = 'search-bar__hint-screen-name';
+    hintScreenNameSpan.textContent = '@' + channel.screenName;
+    hintDiv.append(hintScreenNameSpan);
+
+    return hintDiv;
+}
+
 function showSearchResults(searchResults) {
     const hintsDiv = document.querySelector('.search-bar__dropdown-hints');
     hintsDiv.querySelectorAll('.search-bar__hint').forEach(element => element.remove());
@@ -92,14 +119,7 @@ function showSearchResults(searchResults) {
     hintsNotFound.style.display = 'none';
 
     searchResults.forEach(channel => {
-        const channelHint = document.createElement('p');
-        channelHint.className = 'search-bar__hint';
-        channelHint.textContent = channel.name;
-        channelHint.addEventListener('click', function(e) {
-            this.parentElement.style.display = "block";
-            this.style.backgroundColor = "yellow";
-        });
-
+        const channelHint = createChannelHint(channel);
         hintsDiv.append(channelHint);
     });
 }
