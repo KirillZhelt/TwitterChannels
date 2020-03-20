@@ -71,6 +71,39 @@ class TwitterAPI {
         }));
         xhttp.send();
     }
+ 
+    getUserTweets(userId, onSuccess, onFailure) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === XMLHttpRequest.DONE) {
+                const result = JSON.parse(this.responseText);
+
+                if (this.status === 200) {
+                    onSuccess(result.map(element => {
+                        const result = {};
+                        result.text = element.text;
+
+                        if (element.entities.media !== undefined) {
+                            if (element.entities.media.length > 0) {
+                                result.imgSrc = element.entities.media[0].media_url;
+                            }
+                        }
+
+                        return result;
+                    }));
+                } else {
+                    onFailure(result);
+                }
+            }
+        }
+        xhttp.open('GET', TwitterAPI._proxy + `api.twitter.com:443/1.1/statuses/user_timeline.json?user_id=${userId}&trim_user=true`, 
+            true);
+        xhttp.setRequestHeader('Authorization', this._getOAuthHeaderString({
+            url: `https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=${userId}&trim_user=true`,
+            method: 'GET',
+        }));
+        xhttp.send();
+    }
 }
 
 export const twitterAPI = new TwitterAPI();
