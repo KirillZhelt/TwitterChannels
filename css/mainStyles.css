@@ -87,6 +87,7 @@ body {
 
 .search-bar__hint-screen-name {
     font-family: 'Roboto', sans-serif;
+    padding-left: 8px;
     color: grey;
 }
 

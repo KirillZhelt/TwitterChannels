@@ -114,10 +114,12 @@ function createChannelHint(channel) {
     hintNameSpan.textContent = channel.name;
     hintDiv.append(hintNameSpan);
 
-    const hintVerifiedImg = document.createElement('img');
-    hintVerifiedImg.className = 'search-bar__hint-verified';
-    hintVerifiedImg.src = 'media/verified-icon.png';
-    hintDiv.append(hintVerifiedImg);
+    if (channel.verified) {
+        const hintVerifiedImg = document.createElement('img');
+        hintVerifiedImg.className = 'search-bar__hint-verified';
+        hintVerifiedImg.src = 'media/verified-icon.png';
+        hintDiv.append(hintVerifiedImg);
+    }
 
     const hintScreenNameSpan = document.createElement('span');
     hintScreenNameSpan.className = 'search-bar__hint-screen-name';
