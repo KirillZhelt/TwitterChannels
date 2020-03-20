@@ -136,3 +136,38 @@ body {
     margin-top: 20px;
     font-weight: 700;
 }
+
+.content {
+    padding: 50px;
+}
+
+.tweet {
+    background-color: #ffffff;
+    width: 600px;
+    margin-top: 10px;
+    border-radius: 6px;
+    padding: 15px 15px 30px 15px;
+}
+
+.tweet:first-child {
+    margin-top: 30px;
+}
+
+.tweet__text {
+    border-radius: 6px;
+    margin-top: 15px;
+    padding: 15px;
+    font-size: 18px;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.75);
+}
+
+.tweet__image {
+    margin-top: 15px;
+    height: 150px;
+    padding: 5px;
+    box-shadow: 0 0 3px 1px #c9c9c9;
+}
+
+.tweet__line {
+    margin-top: 20px;
+}

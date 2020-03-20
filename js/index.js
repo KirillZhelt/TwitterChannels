@@ -3,9 +3,11 @@ import { twitterAPI } from './twitterAPI.js'
 let chosenChannelId;
 let channelHints;
 
-function findChannelById(id) {
-    return channelHints.find(element => {
-        return element.id === chosenChannelId;
+const addedChannels = [];
+
+function findChannelById(channels, id) {
+    return channels.find(element => {
+        return element.id === id;
     });
 }
 
@@ -80,6 +82,18 @@ function setupChannelDiv(channelDiv) {
     channelDeleteButton.addEventListener('click', function() {
         this.parentNode.remove();
     });
+
+    const channelName = channelDiv.querySelector('.channel__name');
+    channelName.addEventListener('click', function(e) {
+        const channel = findChannelById(addedChannels, +channelDiv.id);
+        sessionStorage.setItem('id', channel.id);
+        sessionStorage.setItem('imgSrc', channel.imgSrc);
+        sessionStorage.setItem('name', channel.name);
+
+        window.location.href = '/channel.html';
+
+        e.stopPropagation();
+    });
 }
 
 function setupChannelDivs() {
@@ -147,6 +161,7 @@ function createChannelHint(channel) {
 function createChannel(channel) {
     const channelDiv = document.createElement('div');
     channelDiv.className = 'channel';
+    channelDiv.id = channel.id;
 
     const nameHeader = document.createElement('h5');
     nameHeader.className = 'channel__name';
@@ -183,6 +198,8 @@ function createChannel(channel) {
 }
 
 function addChannelToList(channel) {
+    addedChannels.push(channel);
+
     const channelsList = document.querySelector('.channels-list');
     channelsList.append(createChannel(channel));
 }
@@ -214,7 +231,7 @@ setupChannelDivs();
 const addChannelButton = document.querySelector('.search-bar__button');
 addChannelButton.addEventListener('click', function(e) {
     if (chosenChannelId !== undefined) {
-        addChannelToList(findChannelById(chosenChannelId));
+        addChannelToList(findChannelById(channelHints, chosenChannelId));
 
         const searchInput = document.querySelector('.search-bar__input');
         searchInput.disabled = false;
