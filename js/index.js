@@ -7,19 +7,13 @@ let channelHints;
 const addedChannels = [];
 
 setupSearchBar();
-setupChannelDivs();
 
 const addChannelButton = document.querySelector('.search-bar__button');
 addChannelButton.addEventListener('click', function(e) {
     if (chosenChannelId !== undefined) {
         addChannelToList(findChannelById(channelHints, chosenChannelId));
 
-        const searchInput = document.querySelector('.search-bar__input');
-        searchInput.disabled = false;
-        searchInput.value = '';
-    
-        const dropdownHints = document.querySelector('.search-bar__dropdown-hints');
-        dropdownHints.style.display = '';
+        hideHints();
     
         showSearchNotFound();
     
@@ -28,20 +22,33 @@ addChannelButton.addEventListener('click', function(e) {
     }
 });
 
+function hideHints() {
+    const searchInput = document.querySelector('.search-bar__input');
+    searchInput.disabled = false;
+    searchInput.value = '';
+
+    const dropdownHints = document.querySelector('.search-bar__dropdown-hints');
+    dropdownHints.style.display = '';
+}
+
 function findChannelById(channels, id) {
     return channels.find(element => {
         return element.id === id;
     });
 }
 
+function toggleBlockDisplay(element) {
+    if (window.getComputedStyle(element).display === 'none') {
+        element.style.display = 'block';
+    } else {
+        element.style.display = 'none';
+    }
+}
+
 function setupChannelDiv(channelDiv) {
     channelDiv.addEventListener('click', function() {
         const channelInfoDiv = this.querySelector('.channel__info');
-        if (window.getComputedStyle(channelInfoDiv).display === 'none') {
-            channelInfoDiv.style.display = 'block';
-        } else {
-            channelInfoDiv.style.display = 'none';
-        }
+        toggleBlockDisplay(channelInfoDiv);
     });
 
     const channelDeleteButton = channelDiv.querySelector('.channel__delete');
@@ -52,22 +59,18 @@ function setupChannelDiv(channelDiv) {
     const channelName = channelDiv.querySelector('.channel__name');
     channelName.addEventListener('click', function(e) {
         const channel = findChannelById(addedChannels, +channelDiv.id);
-        sessionStorage.setItem('id', channel.id);
-        sessionStorage.setItem('imgSrc', channel.imgSrc);
-        sessionStorage.setItem('name', channel.name);
-
-        window.location.href = '/channel.html';
+        redirectToChannelTweets(channel);
 
         e.stopPropagation();
     });
 }
 
-function setupChannelDivs() {
-    const channelDivs = document.getElementsByClassName('channel');
+function redirectToChannelTweets(channel) {
+    sessionStorage.setItem('id', channel.id);
+    sessionStorage.setItem('imgSrc', channel.imgSrc);
+    sessionStorage.setItem('name', channel.name);
 
-    for (let i = 0; i < channelDivs.length; i++) {
-        setupChannelDiv(channelDivs[i]);
-    }
+    window.location.href = '/channel.html';
 }
 
 function setupSearchBar() {
