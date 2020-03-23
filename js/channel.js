@@ -11,7 +11,7 @@ document.title = name;
 
 const tweets = twitterAPI.getUserTweets(id, showTweets, errObj => {
     alert('No tweets are loaded!');
-})
+});
 
 function createTweetArticle(tweet) {
     const tweetArticle = document.createElement('article');
