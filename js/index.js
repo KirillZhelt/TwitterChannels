@@ -1,4 +1,4 @@
-import { twitterAPI } from './twitterAPI.js'
+import { ChannelHintsUpdater } from './hintsUpdater.js';
 
 let chosenChannelId;
 let channelHints;
@@ -9,63 +9,6 @@ function findChannelById(channels, id) {
     return channels.find(element => {
         return element.id === id;
     });
-}
-
-class ChannelHintsUpdater {
-
-    // undefined value means no query in cache, null means query is pending, and other value is real value
-    queriesCache = new Map();
-
-    queryRequestTimestamps = new Map();
-    
-    isLatestPossible(input) {
-        const laterQueries = [];
-
-        this.queryRequestTimestamps.forEach((value, key, m) => {
-            if (value.getTime() > m.get(input).getTime()) {
-                laterQueries.push(key);
-            }
-        });
-
-        for (const laterQuery of laterQueries) {
-            if (this.queriesCache.get(laterQuery) !== undefined && this.queriesCache.get(laterQuery) !== null) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    search(e) {
-        const input = e.target.value;
-        if (input.length === 0) {
-            showSearchNotFound();
-            return;
-        }
-
-        this.queryRequestTimestamps.set(input, new Date());
-
-        if (this.queriesCache.get(input) !== undefined && this.queriesCache.get(input) !== null) {
-            channelHints = this.queriesCache.get(input);
-            showSearchResults(channelHints);
-        } else {
-            if (this.queriesCache.get(input) === undefined) {
-                this.queriesCache.set(input, null); // means that request is pending
-
-                twitterAPI.searchChannels(input, elements => {
-                    this.queriesCache.set(input, elements);
-                    
-                    if (this.isLatestPossible(input)) {
-                        channelHints = elements;
-                        showSearchResults(elements);
-                    }
-                }, errObj => {
-                    this.queriesCache.set(input, undefined);
-                    showSearchNotFound(errObj);
-                });
-            }
-        }
-    }
 }
 
 function setupChannelDiv(channelDiv) {
@@ -109,7 +52,12 @@ function setupSearchBar() {
 
     const channelHintsUpdater = new ChannelHintsUpdater();
     searchInput.addEventListener('input', e => {
-        channelHintsUpdater.search(e);
+        channelHintsUpdater.search(e.target.value, results => {
+            channelHints = results;
+            showSearchResults(channelHints);
+        }, errObj => {
+            showSearchNotFound(errObj);
+        });
     });
 }
 
