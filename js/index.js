@@ -86,6 +86,7 @@ function setupSearchBar() {
 
 function createChannelHint(channel) {
     const hintDiv = createDiv('search-bar__hint');
+    hintDiv.id = channel.id;
 
     hintDiv.append(createImage('search-bar__hint-icon', channel.imgSrc));
     hintDiv.append(createSpan('search-bar__hint-name', channel.name));
