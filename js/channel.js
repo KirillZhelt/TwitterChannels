@@ -1,4 +1,5 @@
 import { twitterAPI } from './twitterAPI.js';
+import { createImage, createParagraph, createLine } from './utils.js';
 
 const name = sessionStorage.getItem('name');
 const imgSrc = sessionStorage.getItem('imgSrc');
@@ -17,26 +18,14 @@ function createTweetArticle(tweet) {
     const tweetArticle = document.createElement('article');
     tweetArticle.className = 'tweet';
 
-    const iconImg = document.createElement('img');
-    iconImg.className = 'tweet__icon';
-    iconImg.src = imgSrc;
-    tweetArticle.append(iconImg);
-
-    const tweetText = document.createElement('p');
-    tweetText.className = 'tweet__text';
-    tweetText.textContent = tweet.text;
-    tweetArticle.append(tweetText);
+    tweetArticle.append(createImage('tweet__icon', imgSrc));
+    tweetArticle.append(createParagraph('tweet__text', tweet.text));
 
     if (tweet.imgSrc !== undefined) {
-        const tweetImg = document.createElement('img');
-        tweetImg.className = 'tweet__image';
-        tweetImg.src = tweet.imgSrc;
-        tweetArticle.append(tweetImg);
+        tweetArticle.append(createImage('tweet__image', tweet.imgSrc));
     }
 
-    const hr = document.createElement('hr');
-    hr.className = 'tweet__line';
-    tweetArticle.append(hr);
+    tweetArticle.append(createLine('tweet__line'));
 
     return tweetArticle;
 }

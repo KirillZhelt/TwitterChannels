@@ -1,9 +1,32 @@
 import { ChannelHintsUpdater } from './hintsUpdater.js';
+import { createImage, createSpan, createHeader5, createDiv, createParagraph } from './utils.js';
 
 let chosenChannelId;
 let channelHints;
 
 const addedChannels = [];
+
+setupSearchBar();
+setupChannelDivs();
+
+const addChannelButton = document.querySelector('.search-bar__button');
+addChannelButton.addEventListener('click', function(e) {
+    if (chosenChannelId !== undefined) {
+        addChannelToList(findChannelById(channelHints, chosenChannelId));
+
+        const searchInput = document.querySelector('.search-bar__input');
+        searchInput.disabled = false;
+        searchInput.value = '';
+    
+        const dropdownHints = document.querySelector('.search-bar__dropdown-hints');
+        dropdownHints.style.display = '';
+    
+        showSearchNotFound();
+    
+        chosenChannelId = undefined;
+        channelHints = undefined;
+    }
+});
 
 function findChannelById(channels, id) {
     return channels.find(element => {
@@ -62,31 +85,16 @@ function setupSearchBar() {
 }
 
 function createChannelHint(channel) {
-    const hintDiv = document.createElement('div');
-    hintDiv.className = 'search-bar__hint';
-    hintDiv.id = channel.id;
+    const hintDiv = createDiv('search-bar__hint');
 
-    const hintIconImg = document.createElement('img');
-    hintIconImg.className = 'search-bar__hint-icon';
-    hintIconImg.src = channel.imgSrc;
-    hintDiv.append(hintIconImg);
-
-    const hintNameSpan = document.createElement('span');
-    hintNameSpan.className = 'search-bar__hint-name';
-    hintNameSpan.textContent = channel.name;
-    hintDiv.append(hintNameSpan);
+    hintDiv.append(createImage('search-bar__hint-icon', channel.imgSrc));
+    hintDiv.append(createSpan('search-bar__hint-name', channel.name));
 
     if (channel.verified) {
-        const hintVerifiedImg = document.createElement('img');
-        hintVerifiedImg.className = 'search-bar__hint-verified';
-        hintVerifiedImg.src = 'media/verified-icon.png';
-        hintDiv.append(hintVerifiedImg);
+        hintDiv.append(createImage('search-bar__hint-verified', 'media/verified-icon.png'));
     }
 
-    const hintScreenNameSpan = document.createElement('span');
-    hintScreenNameSpan.className = 'search-bar__hint-screen-name';
-    hintScreenNameSpan.textContent = '@' + channel.screenName;
-    hintDiv.append(hintScreenNameSpan);
+    hintDiv.append(createSpan('search-bar__hint-screen-name', '@' + channel.screenName));
 
     hintDiv.addEventListener('click', function(e) {
         const hints = document.querySelectorAll('.search-bar__hint');
@@ -107,37 +115,25 @@ function createChannelHint(channel) {
 }
 
 function createChannel(channel) {
-    const channelDiv = document.createElement('div');
-    channelDiv.className = 'channel';
+    const channelDiv = createDiv('channel');
     channelDiv.id = channel.id;
 
-    const nameHeader = document.createElement('h5');
-    nameHeader.className = 'channel__name';
-    nameHeader.textContent = channel.name;
-    channelDiv.append(nameHeader);
+    channelDiv.append(createHeader5('channel__name', channel.name));
+    channelDiv.append(createImage('channel__delete', 'media/recycle-bin.png'));
 
-    const binImg = document.createElement('img');
-    binImg.className = 'channel__delete';
-    binImg.src = 'media/recycle-bin.png';
-    channelDiv.append(binImg);
-
-    const channelInfoDiv = document.createElement('div');
-    channelInfoDiv.className = 'channel__info';
+    const channelInfoDiv = createDiv('channel__info');
     channelDiv.append(channelInfoDiv);
 
-    const descriptionParagraph = document.createElement('p');
+    const descriptionParagraph = createParagraph('', channel.description);
     descriptionParagraph.classList.add('channel__text', 'channel__description');
-    descriptionParagraph.textContent = channel.description;
     channelInfoDiv.append(descriptionParagraph);
 
-    const tweetsParagraph = document.createElement('p');
+    const tweetsParagraph = createParagraph('', 'Tweets: ' + channel.tweetsCount);
     tweetsParagraph.classList.add('channel__text', 'channel__number-of-tweets');
-    tweetsParagraph.textContent = 'Tweets: ' + channel.tweetsCount;
     channelInfoDiv.append(tweetsParagraph);
 
-    const followersParagraph = document.createElement('p');
+    const followersParagraph = createParagraph('', 'Followers: ' + channel.followersCount);
     followersParagraph.classList.add('channel__text', 'channel__number-of-followers');
-    followersParagraph.textContent = 'Followers: ' + channel.followersCount;
     channelInfoDiv.append(followersParagraph);
 
     setupChannelDiv(channelDiv);
@@ -172,25 +168,3 @@ function showSearchNotFound(errorObj) {
     const hintsNotFound = hintsDiv.querySelector('.search-bar__hints-not-found');
     hintsNotFound.style.display = '';
 }
-
-setupSearchBar();
-setupChannelDivs();
-
-const addChannelButton = document.querySelector('.search-bar__button');
-addChannelButton.addEventListener('click', function(e) {
-    if (chosenChannelId !== undefined) {
-        addChannelToList(findChannelById(channelHints, chosenChannelId));
-
-        const searchInput = document.querySelector('.search-bar__input');
-        searchInput.disabled = false;
-        searchInput.value = '';
-    
-        const dropdownHints = document.querySelector('.search-bar__dropdown-hints');
-        dropdownHints.style.display = '';
-    
-        showSearchNotFound();
-    
-        chosenChannelId = undefined;
-        channelHints = undefined;
-    }
-});
