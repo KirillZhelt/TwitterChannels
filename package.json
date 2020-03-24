@@ -1,0 +1,22 @@
+{
+  "name": "twitterchannels",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KirillZhelt/TwitterChannels.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KirillZhelt/TwitterChannels/issues"
+  },
+  "homepage": "https://github.com/KirillZhelt/TwitterChannels#readme",
+  "dependencies": {
+    "oauth-1.0a": "^2.2.6"
+  }
+}

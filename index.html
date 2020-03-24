@@ -27,7 +27,13 @@
         <div class="search-bar">
             <input type="text" class="search-bar__input">
             <div class="search-bar__dropdown-hints">
-
+                <p class="search-bar__hints-not-found">No results found</p>
+                <!-- <div class="search-bar__hint">
+                    <img class="search-bar__hint-icon" src="https://pbs.twimg.com/profile_images/1225081518625714177/86w2qba3_normal.jpg">
+                    <span class="search-bar__hint-name">MLsssssssssssssssssssssS</span>
+                    <img class="search-bar__hint-verified" src="media/verified-icon.png">
+                    <span class="search-bar__hint-screen-name">@MLS</span>
+                </div> -->
             </div>
 
             <button class="search-bar__button">
@@ -36,9 +42,9 @@
         </div>
 
         <section class="channels-list">
-            <div class="channel">
+            <!-- <div class="channel">
                 <h5 class="channel__name">CNN</h5>
-                <img src="media/recycle-bin.png" class="channel__delete"></span>
+                <img src="media/recycle-bin.png" class="channel__delete">
                 <div class="channel__info">
                     <p class="channel__text channel__description">
                         Explore the universe and discover our home planet with NASA.
@@ -50,43 +56,16 @@
                         Followers: 234k
                     </p>
                 </div>
-            </div>
-
-            <div class="channel">
-                <h5 class="channel__name">CNN</h5>
-                <img src="media/recycle-bin.png" class="channel__delete"></span>
-                <div class="channel__info">
-                    <p class="channel__text channel__description">
-                        Explore the universe and discover our home planet with NASA.
-                    </p>
-                    <p class="channel__text channel__number-of-tweets">
-                        Tweets: 59k
-                    </p>
-                    <p class="channel__text channel__number-of-followers">
-                        Followers: 234k
-                    </p>
-                </div>
-            </div>
-
-            <div class="channel">
-                <h5 class="channel__name">CNN</h5>
-                <img src="media/recycle-bin.png" class="channel__delete"></span>
-                <div class="channel__info">
-                    <p class="channel__text channel__description">
-                        Explore the universe and discover our home planet with NASA.
-                    </p>
-                    <p class="channel__text channel__number-of-tweets">
-                        Tweets: 59k
-                    </p>
-                    <p class="channel__text channel__number-of-followers">
-                        Followers: 234k
-                    </p>
-                </div>
-            </div>
+            </div> -->
         </section>
     </section>
 
-    <script src="js/index.js"></script>
+    <!-- sha1 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64.js"></script>
+
+    <script src="node_modules/oauth-1.0a/oauth-1.0a.js"></script>
+    <script src="js/index.js" type="module"></script>
 
 </body>
 </html>
