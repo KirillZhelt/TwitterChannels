@@ -7,7 +7,7 @@ body {
     background-color: #1da1f2;
 }
 
-.channels {
+.channels, .categories {
     padding: 50px;
 }
 
@@ -119,7 +119,7 @@ body {
     display: inline-block;
 }
 
-.channel__delete {
+.delete-icon {
     display: inline-block;
     width: 20px;
     height: 20px;    
@@ -169,5 +169,16 @@ body {
 }
 
 .tweet__line {
+    margin-top: 20px;
+}
+
+.categories-list {
+    margin-top: 20px;
+    padding-left: 40px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+}
+
+.categories-list__category {
     margin-top: 20px;
 }

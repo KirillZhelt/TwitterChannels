@@ -141,7 +141,7 @@ function createChannel(channel) {
     channelDiv.id = channel.id;
 
     channelDiv.append(createHeader5('channel__name', channel.name));
-    channelDiv.append(createImage('channel__delete', 'media/recycle-bin.png'));
+    channelDiv.append(createImage('channel__delete delete-icon', 'media/recycle-bin.png'));
 
     const channelInfoDiv = createDiv('channel__info');
     channelDiv.append(channelInfoDiv);

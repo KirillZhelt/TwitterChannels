@@ -36,3 +36,7 @@ export function createHeader5(className, text) {
 export function createDiv(className) {
     return createElement('div', className);
 }
+
+export function createListItem(className) {
+    return createElement('li', className);
+}
