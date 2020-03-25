@@ -7,6 +7,15 @@ body {
     background-color: #1da1f2;
 }
 
+.navigation-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
 .channels, .categories {
     padding: 50px;
 }
