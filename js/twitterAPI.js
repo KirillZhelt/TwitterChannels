@@ -26,90 +26,68 @@ class TwitterAPI {
                                 .Authorization;
     }
 
-    unsubscribe() {
-        this._isSubscribed = false;
+    async _makeRequest(proxyUrl, url, mapper, onSuccess, onFailure) {
+        const response = await fetch(proxyUrl, {
+                headers: {
+                    'Authorization': this._getOAuthHeaderString({
+                           url: url,
+                           method: 'GET',
+                       }),
+                },
+            });
+        
+        const result = await response.json();
+        if (response.ok) {
+            onSuccess(mapper.call(this, result));
+        } else {
+            onFailure(result);
+        }
     }
 
-    subscribe() {
-        this._isSubscribed = true;
+    _mapChannelsNeededInformation(resultFromResponse) {
+        return resultFromResponse.map(element => {
+            return {
+                id: element.id,
+                name: element.name,
+                screenName: element.screen_name,
+                verified: element.verified,
+                imgSrc: element.profile_image_url,
+                description: element.description,
+                followersCount: element.followers_count,
+                tweetsCount: element.statuses_count,
+            };
+        });
     }
 
-    _onChannelsSearchReadyStateChange(xhr, onSuccess, onFailure) {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            const result = JSON.parse(xhr.responseText);
+    async searchChannels(searchString, onSuccess, onFailure) {
+        this._makeRequest(TwitterAPI._proxy +
+            `api.twitter.com:443/1.1/users/search.json?q=${searchString}&count=5`, 
+            `https://api.twitter.com/1.1/users/search.json?q=${searchString}&count=5`,
+            this._mapChannelsNeededInformation,
+            onSuccess, onFailure);
+    }
 
-            if (xhr.status === 200) {
-                if (this._isSubscribed) {
-                    onSuccess(result.map(element => {
-                        return {
-                            id: element.id,
-                            name: element.name,
-                            screenName: element.screen_name,
-                            verified: element.verified,
-                            imgSrc: element.profile_image_url,
-                            description: element.description,
-                            followersCount: element.followers_count,
-                            tweetsCount: element.statuses_count,
-                        };
-                    }));
-                }
-            } else {
-                if (this._isSubscribed) {
-                    onFailure(result);
+    _mapTweetsNeededInformation(resultFromResponse) {
+        return resultFromResponse.map(element => {
+            const result = {};
+            result.text = element.text;
+
+            if (element.entities.media !== undefined) {
+                if (element.entities.media.length > 0) {
+                    result.imgSrc = element.entities.media[0].media_url;
                 }
             }
-        }
+
+            return result;
+        });
     }
 
-    searchChannels(searchString, onSuccess, onFailure) {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = () => {
-            this._onChannelsSearchReadyStateChange(xhttp, onSuccess, onFailure);
-        };
-        xhttp.open('GET', TwitterAPI._proxy + `api.twitter.com:443/1.1/users/search.json?q=${searchString}&count=5`, 
-            true);
-        xhttp.setRequestHeader('Authorization', this._getOAuthHeaderString({
-            url: `https://api.twitter.com/1.1/users/search.json?q=${searchString}&count=5`,
-            method: 'GET',
-        }));
-        xhttp.send();
-    }
- 
-    _onGetUserTweetsReadyStateChange(xhr, onSuccess, onFailure) {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            const result = JSON.parse(xhr.responseText);
-
-            if (xhr.status === 200) {
-                onSuccess(result.map(element => {
-                    const result = {};
-                    result.text = element.text;
-
-                    if (element.entities.media !== undefined) {
-                        if (element.entities.media.length > 0) {
-                            result.imgSrc = element.entities.media[0].media_url;
-                        }
-                    }
-
-                    return result;
-                }));
-            } else {
-                onFailure(result);
-            }
-        }
-    }
-
-    getUserTweets(userId, onSuccess, onFailure) {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = () => {
-            this._onGetUserTweetsReadyStateChange(xhttp, onSuccess, onFailure);
-        }
-        xhttp.open('GET', TwitterAPI._proxy + `api.twitter.com:443/1.1/statuses/user_timeline.json?user_id=${userId}&trim_user=true`, 
-            true);
-        xhttp.setRequestHeader('Authorization', this._getOAuthHeaderString({
-            url: `https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=${userId}&trim_user=true`,
-            method: 'GET',
-        }));
-        xhttp.send();
+    async getUserTweets(userId, onSuccess, onFailure) {
+        this._makeRequest(TwitterAPI._proxy + 
+            `api.twitter.com:443/1.1/statuses/user_timeline.json?user_id=${userId}&trim_user=true`, 
+            `https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=${userId}&trim_user=true`,
+            this._mapTweetsNeededInformation,
+            onSuccess, onFailure);
     }
 }
 

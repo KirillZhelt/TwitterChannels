@@ -1,9 +1,9 @@
 import { twitterAPI } from './twitterAPI.js';
 import { createImage, createParagraph, createLine } from './utils.js';
 
-const name = sessionStorage.getItem('name');
-const imgSrc = sessionStorage.getItem('imgSrc');
-const id = sessionStorage.getItem('id');
+const name = localStorage.getItem('name');
+const imgSrc = localStorage.getItem('imgSrc');
+const id = localStorage.getItem('id');
 
 const pageHeader = document.querySelector('.page-header__headline');
 pageHeader.textContent = name;

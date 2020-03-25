@@ -4,9 +4,10 @@ import { createImage, createSpan, createHeader5, createDiv, createParagraph } fr
 let chosenChannelId;
 let channelHints;
 
-const addedChannels = [];
+let addedChannels = [];
 
 setupSearchBar();
+loadAddedChannels();
 
 const addChannelButton = document.querySelector('.search-bar__button');
 addChannelButton.addEventListener('click', function(e) {
@@ -21,6 +22,18 @@ addChannelButton.addEventListener('click', function(e) {
         channelHints = undefined;
     }
 });
+
+function loadAddedChannels() {
+    addedChannels = JSON.parse(localStorage.getItem('addedChannels'));
+    if (addedChannels === null) {
+        addedChannels = [];
+    }
+
+    const channelsList = document.querySelector('.channels-list');
+    for (const channel of addedChannels) {
+        channelsList.append(createChannel(channel));
+    }
+}
 
 function hideHints() {
     const searchInput = document.querySelector('.search-bar__input');
@@ -54,6 +67,11 @@ function setupChannelDiv(channelDiv) {
     const channelDeleteButton = channelDiv.querySelector('.channel__delete');
     channelDeleteButton.addEventListener('click', function() {
         this.parentNode.remove();
+
+        addedChannels.splice(addedChannels.findIndex(value => {
+            return value.id === +channelDiv.id;
+        }), 1);
+        localStorage.setItem('addedChannels', JSON.stringify(addedChannels));
     });
 
     const channelName = channelDiv.querySelector('.channel__name');
@@ -66,9 +84,9 @@ function setupChannelDiv(channelDiv) {
 }
 
 function redirectToChannelTweets(channel) {
-    sessionStorage.setItem('id', channel.id);
-    sessionStorage.setItem('imgSrc', channel.imgSrc);
-    sessionStorage.setItem('name', channel.name);
+    localStorage.setItem('id', channel.id);
+    localStorage.setItem('imgSrc', channel.imgSrc);
+    localStorage.setItem('name', channel.name);
 
     window.location.href = '/channel.html';
 }
@@ -147,6 +165,7 @@ function createChannel(channel) {
 
 function addChannelToList(channel) {
     addedChannels.push(channel);
+    localStorage.setItem('addedChannels', JSON.stringify(addedChannels));
 
     const channelsList = document.querySelector('.channels-list');
     channelsList.append(createChannel(channel));

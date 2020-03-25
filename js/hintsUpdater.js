@@ -48,7 +48,7 @@ export class ChannelHintsUpdater {
 
     search(input, onSearchResults, onSearchNotFound) {
         if (input.length === 0) {
-            showSearchNotFound();
+            onSearchNotFound();
             return;
         }
 
