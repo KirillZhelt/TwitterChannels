@@ -26,6 +26,10 @@ body {
     font-weight: 400; 
 }
 
+.category-chooser {
+    margin-top: 30px;
+}
+
 .search-header {
     margin-top: 30px;
 }
@@ -134,6 +138,12 @@ body {
     height: 20px;    
     margin-left: 20px;
     cursor: pointer;
+}
+
+.channel__category {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    margin-left: 15px;
 }
 
 .channel__info {

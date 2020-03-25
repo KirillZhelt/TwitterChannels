@@ -1,18 +1,22 @@
 import { ChannelHintsUpdater } from './hintsUpdater.js';
-import { createImage, createSpan, createHeader5, createDiv, createParagraph } from './utils.js';
+import { createImage, createSpan, createHeader5, createDiv, createParagraph, createSelectOption } from './utils.js';
 
 let chosenChannelId;
 let channelHints;
 
 let addedChannels = [];
 
+let categories = [];
+
 setupSearchBar();
+setupCategoryChooser();
 loadAddedChannels();
 
 const addChannelButton = document.querySelector('.search-bar__button');
 addChannelButton.addEventListener('click', function(e) {
     if (chosenChannelId !== undefined) {
-        addChannelToList(findChannelById(channelHints, chosenChannelId));
+        const category = document.querySelector('.category-chooser').value;
+        addChannelToList(findChannelById(channelHints, chosenChannelId), category);
 
         hideHints();
     
@@ -32,6 +36,19 @@ function loadAddedChannels() {
     const channelsList = document.querySelector('.channels-list');
     for (const channel of addedChannels) {
         channelsList.append(createChannel(channel));
+    }
+}
+
+function setupCategoryChooser() {
+    const categoryChooser = document.querySelector('.category-chooser');
+    
+    categories = JSON.parse(localStorage.getItem('addedCategories'));
+    if (categories !== null) {
+        for (const category of categories) {
+            categoryChooser.append(createSelectOption('category-chooser__option', category, category));
+        }
+    } else {
+        categories = []
     }
 }
 
@@ -143,6 +160,12 @@ function createChannel(channel) {
     channelDiv.append(createHeader5('channel__name', channel.name));
     channelDiv.append(createImage('channel__delete delete-icon', 'media/recycle-bin.png'));
 
+    if (categories.indexOf(channel.category) !== -1) {
+        channelDiv.append(createSpan('channel__category', channel.category));
+    } else {
+        channel.category = undefined;
+    }
+
     const channelInfoDiv = createDiv('channel__info');
     channelDiv.append(channelInfoDiv);
 
@@ -163,7 +186,8 @@ function createChannel(channel) {
     return channelDiv;
 }
 
-function addChannelToList(channel) {
+function addChannelToList(channel, category) {
+    channel.category = category;
     addedChannels.push(channel);
     localStorage.setItem('addedChannels', JSON.stringify(addedChannels));
 
