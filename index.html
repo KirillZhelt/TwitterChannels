@@ -11,12 +11,18 @@
 </head>
 <body>
 
+    <a href="category.html" class="navigation-link categories-link">Categories</a>
+
     <section class="channels">
         <header class="page-header">
             <h1 class="page-header__headline">
                 Twitter Channels
             </h1>
         </header>
+
+        <select class="category-chooser">
+            <option value=""></option>
+        </select>
 
         <header class="search-header">
             <h5 class="search-header__headline">
@@ -44,7 +50,8 @@
         <section class="channels-list">
             <!-- <div class="channel">
                 <h5 class="channel__name">CNN</h5>
-                <img src="media/recycle-bin.png" class="channel__delete">
+                <img src="media/recycle-bin.png" class="delete-icon channel__delete">
+                <span class="channel__category">Category 1</span>
                 <div class="channel__info">
                     <p class="channel__text channel__description">
                         Explore the universe and discover our home planet with NASA.
